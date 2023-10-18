@@ -2,7 +2,7 @@ package pl.zajacp.concurrency.demo.problems;
 
 import lombok.SneakyThrows;
 
-import java.util.concurrent.*;
+import java.util.concurrent.Executors;
 
 public record Fox(String name) {
 
@@ -35,14 +35,14 @@ public record Fox(String name) {
   }
 
   public static void main(String[] args) {
-    var foxy = new Fox("Urwisek");
-    var tails = new Fox("Chytrusek");
+    var urwisek = new Fox("Urwisek");
+    var chytrusek = new Fox("Chytrusek");
     var food = new Food();
     var water = new Water();
 
     try (var service = Executors.newCachedThreadPool()) {
-      service.submit(() -> foxy.eatAndDrink(food, water));
-      service.submit(() -> tails.drinkAndEat(food, water));
+      service.submit(() -> urwisek.eatAndDrink(food, water));
+      service.submit(() -> chytrusek.drinkAndEat(food, water));
     }
   }
 }

@@ -1,4 +1,4 @@
-package pl.zajacp.concurrency.tasks.eating;
+package pl.zajacp.concurrency.tasks;
 
 import lombok.SneakyThrows;
 
@@ -9,18 +9,18 @@ public class FeedingAnimalsPt2 {
     public static void main(String[] args) {
         FoodBowl foodBowl = new FoodBowl();
 
-        Runnable lion = createAnimal("Lion", foodBowl);
-        Runnable elephant = createAnimal("Elephant", foodBowl);
-        Runnable giraffe = createAnimal("Giraffe", foodBowl);
+        Runnable feedLion = feedAnimal("Lion", foodBowl);
+        Runnable feedElephant = feedAnimal("Elephant", foodBowl);
+        Runnable feedGiraffe = feedAnimal("Giraffe", foodBowl);
 
         try (var service = Executors.newFixedThreadPool(3)) {
-            service.submit(lion);
-            service.submit(elephant);
-            service.submit(giraffe);
+            service.submit(feedLion);
+            service.submit(feedElephant);
+            service.submit(feedGiraffe);
         }
     }
 
-    public static Runnable createAnimal(String type, FoodBowl foodBowl) {
+    public static Runnable feedAnimal(String type, FoodBowl foodBowl) {
         return () -> {
             System.out.println(type + " wants to eat.");
             foodBowl.use(type);

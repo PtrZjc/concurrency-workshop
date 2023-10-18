@@ -6,14 +6,20 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class CollectorDemo {
+    private final static Random random = new Random();
 
     public static void main(String[] args) {
-        Random random = new Random();
 
-        Map<String, Long> letterCount = Stream.generate(() -> String.valueOf((char) (random.nextInt(26) + 'a')))
+        Map<String, Long> letterCount = Stream.generate(CollectorDemo::getRandomLowercaseLetter)
                 .parallel()
                 .limit(10)
                 .collect(Collectors.groupingByConcurrent(CollectorDemo::returnSelfCheckingThread, Collectors.counting()));
+
+        System.out.println(letterCount);
+    }
+
+    private static String getRandomLowercaseLetter() {
+        return String.valueOf((char) (random.nextInt(26) + 'a'));
     }
 
     private static String returnSelfCheckingThread(String value) {

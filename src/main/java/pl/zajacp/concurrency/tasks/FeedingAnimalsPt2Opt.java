@@ -1,4 +1,4 @@
-package pl.zajacp.concurrency.tasks.eating;
+package pl.zajacp.concurrency.tasks;
 
 import lombok.Data;
 import lombok.SneakyThrows;
@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class FeedingAnimalsPt2Opt {
 
-    public static Runnable createAnimal(String animalType, ConfigurableFoodBowl foodBowl) {
+    public static Runnable feedAnimal(String animalType, ConfigurableFoodBowl foodBowl) {
         return () -> {
             System.out.println(animalType + " wants to eat.");
             foodBowl.use(animalType);
@@ -34,9 +34,9 @@ public class FeedingAnimalsPt2Opt {
         zooKeeper.start();
 
         try (var executor = Executors.newFixedThreadPool(4)) {
-            executor.submit(createAnimal("Lion", foodBowl));
-            executor.submit(createAnimal("Elephant", foodBowl));
-            executor.submit(createAnimal("Giraffe", foodBowl));
+            executor.submit(feedAnimal("Lion", foodBowl));
+            executor.submit(feedAnimal("Elephant", foodBowl));
+            executor.submit(feedAnimal("Giraffe", foodBowl));
         }
     }
 }
@@ -49,7 +49,8 @@ class ConfigurableFoodBowl {
     @SneakyThrows
     public synchronized void use(String animalName) {
         while (eatCount.get() >= bowlSize) wait();
-        // When an animal tries to eat but finds that bowl is empty thread enters a waiting state by invoking wait() until the bowl is refilled
+        // When an animal tries to eat but finds that bowl is empty thread enters
+        // a waiting state by invoking wait() until the bowl is refilled
 
         System.out.println(animalName + " is eating.");
         Thread.sleep((long) (Math.random() * 100));
@@ -61,6 +62,7 @@ class ConfigurableFoodBowl {
         eatCount.set(0);
         System.out.println("Food bowl has been refilled.");
         notifyAll();
-        // Once the ZooKeeper refills the bowl, notifyAll() is called to wake up any animal threads that were waiting to eat.
+        // Once the ZooKeeper refills the bowl, notifyAll() is called to
+        // wake up any animal threads that were waiting to eat.
     }
 }

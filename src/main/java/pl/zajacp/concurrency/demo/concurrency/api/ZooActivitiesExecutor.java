@@ -14,7 +14,7 @@ public class ZooActivitiesExecutor {
                         System.out.println("Printing profile of animal " + i)
                 );
 
-        try (ExecutorService service = Executors.newSingleThreadExecutor()) {
+        try (var service = Executors.newSingleThreadExecutor()) {
             System.out.println("Zoo day begins");
             service.execute(countAnimals);
             service.execute(printAnimalProfiles);
